@@ -1,0 +1,85 @@
+.App-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  background-color: #FBDBB8;
+  height: 64px;
+  width: 100%;
+}
+.App-title {
+  color: white
+}
+
+/* Questionnaire */
+.questionnaire {
+  display: flex;
+}
+.question-container {
+  position: fixed;
+  width: 100%;
+  min-height: 96px;
+  background-color: #FFFBD3;
+}
+  .question-container .progress-bar {
+    background-color: #E2B8AE;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 12px;
+    -webkit-transition: width 0.3s ease-in-out;
+    -moz-transition: width 0.3s ease-in-out;
+    -o-transition: width 0.3s ease-in-out;
+    transition: width 0.3s ease-in-out;
+  }
+.answer-container {
+  margin-top: 96px;
+  width: 100%;
+}
+.nav-container {
+  position: fixed;
+  justify-content: center;
+  width: 100%;
+  bottom: 0;
+  min-height: 96px;
+  background-color: #FBDBB8;
+}
+  .nav-container .nav {
+    width: 83%;
+  }
+  .nav-container .primary-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 342px;
+    height: 48px;
+    background: #E2B8AE;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);  
+  }
+  .nav-container .primary-button:active {
+    box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.25);  
+  }
+    .nav-container .primary-button p {
+      color: white;
+      font-weight: bold;
+      font-size: 24px;
+      margin: 0;
+    }
+  .nav-container .secondary-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 342px;
+    height: 48px;
+    background: #FBDBB8;
+    border: 4px solid #E2B8AE;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);  
+  }
+  .nav-container .secondary-button:active {
+    box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.25);  
+  }
+    .nav-container .secondary-button p {
+      color: #E2B8AE;
+      font-weight: bold;
+      font-size: 24px;
+      margin: 0;
+    }
