@@ -19,7 +19,8 @@ const questions = [
   ]
   },
   {
-    question: "No really?",
+    conditional: [0, 0],
+    question: "Who runs %conditional% and what is their name?",
     form: [{
       type: "text",
       label: "How you are really..",
@@ -36,6 +37,7 @@ const questions = [
   }
 ]
 
+
 function App() {
 
   const handleQuestionnaireSubmit = (e) => {
@@ -44,10 +46,15 @@ function App() {
 
   return (
     <div className="App">
-      <header className="App-header">
-        <h3 className="App-title">Register your business</h3>
-      </header>
-      <Questionnaire questions={questions} onSubmit={(e) => handleQuestionnaireSubmit(e)} />
+      <Questionnaire
+        color= {{
+          primaryColor: "#E2B8AE",
+          secondaryColor: "#FBDBB8",
+          neutralColor: "#FFFBD3",
+        }}
+        questions={questions}
+        onSubmit={(e) => handleQuestionnaireSubmit(e)}
+      />
     </div>
   );
 }

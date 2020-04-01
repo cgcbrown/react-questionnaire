@@ -33,7 +33,7 @@ function useScroll() {
 }
 
 function ProgressBar(props) {
-  const { current, total } = props;
+  const { current, total, color } = props;
   const [ progress, setProgress ] = useState("");
 
   useEffect(() => {
@@ -46,11 +46,12 @@ function ProgressBar(props) {
   }
 
   return (
-    <div className="progress-bar" style={{width: progress}}></div>
+    <div className="progress-bar" style={{width: progress, backgroundColor: color}}></div>
   )
 }
 
 function Questionnaire(props) {
+  const { primaryColor, secondaryColor, neutralColor } = props.color;
   const [ questions, setQuestions ] = useState(props.questions)
   const [ questionTop, setQuestionTop ] = useState("64px");
 
@@ -73,10 +74,16 @@ function Questionnaire(props) {
 
   const isButtonDisabled = (answers) => {
     if (questions[currentQuestion].form.length === answers.length) {
-      if (answers.includes('')) {
-        return true
-      } else {
-        return false;
+      let empty;
+      for (var i = 0; i < answers.length; i++) {
+        if (answers[i] === undefined || answers[i] === "") {
+          empty = true;
+          break
+        };
+      }
+
+      if (!empty) {
+        return false
       }
     }
     return true;
@@ -121,11 +128,33 @@ function Questionnaire(props) {
     }
   }
 
+  const renderQuestion = () => {
+    const currentQ = questions[currentQuestion];
+    let questionText = questions[currentQuestion].question;
+
+    //Search for index conditional text
+    if (currentQ.conditional) {
+      const index = questionText.indexOf("%conditional%");
+      if (index !== -1) {
+        // Get first part of text
+        let start = questionText.slice(0, index);
+        // Use conditional array to get previous answer
+        let conditional = questions[currentQ.conditional[0]].form[currentQ.conditional[1]].answer;
+        // Get last bit of text
+        let end = questionText.slice(index + 13);
+        questionText = start + conditional + end;
+      }
+    }
+  
+    return questionText;
+  }
+
   const renderNavButtons = () => {
     if (currentQuestion === 0) {
       return (
         <div
           className={"primary-button " + (buttonDisabled ? "disabled" : null)}
+          style={{backgroundColor: primaryColor}}
           onClick={() => handleNext()}
         >
           <p>Get Started!</p>
@@ -134,11 +163,16 @@ function Questionnaire(props) {
     }
     return (
       <div className="nav row space-between">
-        <div className="secondary-button" onClick={() => handleBack()}>
-          <p>Back</p>
+        <div
+          className="secondary-button"
+          onClick={() => handleBack()}
+          style={{borderColor: primaryColor, backgroundColor: secondaryColor}}
+        >
+          <p style={{color: primaryColor}}>Back</p>
         </div>
         <div
           className={"primary-button " + (buttonDisabled ? "disabled" : null)}
+          style={{backgroundColor: primaryColor}}
           onClick={() => handleNext()}
         >
           <p>Continue</p>
@@ -160,11 +194,16 @@ function Questionnaire(props) {
             placeholder={input.placeholder || ""}
             value={currentAnswers[key] || ""}
             className="text-input"
+            style={{borderColor: primaryColor}}
             onChange={(e) => handleAnswerInput(key, e.target.value)}
           />
           { input.options && input.options.map((option) => {
             return (
-              <div className="secondary-button" onClick={() => handleAnswerInput(key, option)}>
+              <div
+                className="secondary-button"
+                onClick={() => handleAnswerInput(key, option)}
+                style={{borderColor: primaryColor}}
+              >
                 <p>{option}</p>
               </div>
             )
@@ -182,9 +221,15 @@ function Questionnaire(props) {
 
   return (
     <div className="questionnaire">
-      <div className="question-container align-center" style={{top: questionTop}}>
-        <h2>{questions[currentQuestion].question}</h2>
-        <ProgressBar current={currentQuestion} total={questions.length} />
+      <header className="header" style={{backgroundColor: secondaryColor}}>
+        <h3>Register your business</h3>
+      </header>
+      <div
+        className="question-container align-center"
+        style={{top: questionTop, backgroundColor: neutralColor}}
+      >
+        <h2>{renderQuestion()}</h2>
+        <ProgressBar current={currentQuestion} total={questions.length} color={primaryColor} />
       </div>
       <div className="answer-container align-center">
         <form className="container align-center">
@@ -193,7 +238,7 @@ function Questionnaire(props) {
           })}
         </form>
       </div>
-      <div className="nav-container align-center">
+      <div className="nav-container align-center" style={{backgroundColor: secondaryColor}}>
         <div className="container align-center">
           {renderNavButtons()}
         </div>
