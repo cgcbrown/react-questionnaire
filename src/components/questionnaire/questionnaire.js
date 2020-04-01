@@ -175,41 +175,72 @@ function Questionnaire(props) {
           style={{backgroundColor: primaryColor}}
           onClick={() => handleNext()}
         >
-          <p>Continue</p>
+          <p>{currentQuestion >= (questions.length - 1) ? "Finish" : "Continue"}</p>
         </div>
       </div>
     )
   }
 
+  const renderTextInput = (input, inputKey) => {
+    return (
+      <div className="input-container">
+        <label htmlFor={inputKey} >
+          {input.label}
+        </label>
+        <input
+          id={inputKey}
+          type='text'
+          placeholder={input.placeholder || ""}
+          value={currentAnswers[inputKey] || ""}
+          className="text-input"
+          style={{borderColor: primaryColor}}
+          onChange={(e) => handleAnswerInput(inputKey, e.target.value)}
+        />
+        { input.options && input.options.map((option, key) => {
+          return (
+            <div
+              key={key}
+              className="secondary-button"
+              onClick={() => handleAnswerInput(inputKey, option)}
+              style={{borderColor: primaryColor}}
+            >
+              <p>{option}</p>
+            </div>
+          )
+        })}
+      </div>
+    )
+  }
+
+  const renderTextArea = (input, key) => {
+    return (
+      <div className="input-container" key={key}>
+        <label htmlFor={key} >
+          {input.label}
+        </label>
+        <textarea
+          id={key}
+          type="text"
+          rows="6"
+          placeholder={input.placeholder || ""}
+          value={currentAnswers[key] || ""}
+          className="text-input"
+          style={{borderColor: primaryColor}}
+          onChange={(e) => handleAnswerInput(key, e.target.value)}
+        >
+        </textarea>
+      </div>
+    )
+  }
+
   const renderInput = (input, key) => {
-    if (input.type === 'text') {
-      return (
-        <div className="input-container" key={key}>
-          <label htmlFor={key} >
-            {input.label}
-          </label>
-          <input
-            id={key}
-            type={'text'}
-            placeholder={input.placeholder || ""}
-            value={currentAnswers[key] || ""}
-            className="text-input"
-            style={{borderColor: primaryColor}}
-            onChange={(e) => handleAnswerInput(key, e.target.value)}
-          />
-          { input.options && input.options.map((option) => {
-            return (
-              <div
-                className="secondary-button"
-                onClick={() => handleAnswerInput(key, option)}
-                style={{borderColor: primaryColor}}
-              >
-                <p>{option}</p>
-              </div>
-            )
-          })}
-        </div>
-      )
+    switch (input.type) {
+      case 'text':
+        return renderTextInput(input, key);
+      case 'textarea':
+        return renderTextArea(input, key);
+      default:
+        return renderTextInput(input, key);
     }
   }
 

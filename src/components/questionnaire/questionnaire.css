@@ -52,6 +52,7 @@
 
   .questionnaire .answer-container {
     margin-top: 96px;
+    margin-bottom: 144px;
     width: 100%;
   }
     .questionnaire .answer-container .input-container {
@@ -68,6 +69,7 @@
           width: 100%;
           padding: 8px;
           font-size: 24px;
+          resize: none;
         }
       .questionnaire .answer-container .input-container .secondary-button {
         display: flex;
@@ -83,6 +85,7 @@
       .questionnaire .answer-container .input-container p {
         margin: 8px;
       }
+
     .questionnaire .answer-container label {
       padding-bottom: 4px;
     }

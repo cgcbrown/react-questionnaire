@@ -20,20 +20,43 @@ const questions = [
   },
   {
     conditional: [0, 0],
-    question: "Who runs %conditional% and what is their name?",
+    question: "Who runs %conditional% and do you have a picture of them?",
     form: [{
       type: "text",
-      label: "How you are really..",
-      placeholder: "I am actually.."
+      label: "The business is ran by..",
+      placeholder: "Business owner's name.."
     }]
   },
   {
-    question: "Hit me?",
+    conditional: [0, 0],
+    question: "Now tell us more about %conditional%...",
     form: [{
       type: "text",
-      label: "Should I hit?",
-      placeholder: "No"
+      label: "What sector is your business in?",
+      placeholder: "Type sector or select from below",
+      options: ["Services", "Food and Drink", "Homeware", "Arts and Crafts"]
     }]
+  },
+  {
+    conditional: [0, 0],
+    question: "Now tell us more about %conditional%...",
+    form: [
+      {
+        type: "textarea",
+        label: "What does the business do?",
+        placeholder: "The business is a..",
+      },
+      {
+        type: "textarea",
+        label: "Why do you do it?",
+        placeholder: "The business was set up because...",
+      },
+      {
+        type: "textarea",
+        label: "What makes the business unique?",
+        placeholder: "We are unique because...",
+      }
+    ]
   }
 ]
 
@@ -48,9 +71,9 @@ function App() {
     <div className="App">
       <Questionnaire
         color= {{
-          primaryColor: "#E2B8AE",
-          secondaryColor: "#FBDBB8",
-          neutralColor: "#FFFBD3",
+          primaryColor: "#1B4965",
+          secondaryColor: "#62B6CB",
+          neutralColor: "#D3EDFF",
         }}
         questions={questions}
         onSubmit={(e) => handleQuestionnaireSubmit(e)}
