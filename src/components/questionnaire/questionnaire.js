@@ -56,6 +56,7 @@ function Questionnaire(props) {
 
   const [ currentQuestion, setCurrentQuestion ] = useState(0);
   const [ currentAnswers, setCurrentAnswers ] = useState([]);
+  const [ buttonDisabled, setButtonDisabled ] = useState(true);
 
   let scrollY = useScroll().scrollY;
 
@@ -70,15 +71,31 @@ function Questionnaire(props) {
     }
   }
 
-  const handleNext = () => {
-    let newQuestions = [...questions];
-    for (let i = 0; i < currentAnswers.length; i++) {
-      newQuestions[currentQuestion].form[i].answer = currentAnswers[i];
+  const isButtonDisabled = (answers) => {
+    if (questions[currentQuestion].form.length === answers.length) {
+      if (answers.includes('')) {
+        return true
+      } else {
+        return false;
+      }
     }
-    setQuestions(newQuestions);
-    console.log(newQuestions);
-    setCurrentAnswers([]);
-    setCurrentQuestion(currentQuestion + 1);
+    return true;
+  }
+
+  const handleNext = () => {
+    if (!buttonDisabled) {
+      let newQuestions = [...questions];
+      for (let i = 0; i < currentAnswers.length; i++) {
+        newQuestions[currentQuestion].form[i].answer = currentAnswers[i];
+      }
+      if (currentQuestion === questions.length - 1) {
+        props.onSubmit(newQuestions);
+      }
+      setQuestions(newQuestions);
+      setCurrentAnswers([]);
+      setButtonDisabled(true);
+      setCurrentQuestion(currentQuestion + 1);
+    }
   }
 
   const handleBack = () => {
@@ -89,19 +106,26 @@ function Questionnaire(props) {
     })
     setCurrentAnswers(previousAnswers);
     setCurrentQuestion(questionIndex);
+    setButtonDisabled(false);
   }
 
   const handleAnswerInput = (key, value) => {
     let newAnswers = [...currentAnswers];
     newAnswers[key] = value;
-    return setCurrentAnswers(newAnswers);
+    setCurrentAnswers(newAnswers);
+
+    if (isButtonDisabled(newAnswers)) {
+      setButtonDisabled(true)
+    } else {
+      setButtonDisabled(false);
+    }
   }
 
   const renderNavButtons = () => {
     if (currentQuestion === 0) {
       return (
         <div
-          className="primary-button"
+          className={"primary-button " + (buttonDisabled ? "disabled" : null)}
           onClick={() => handleNext()}
         >
           <p>Get Started!</p>
@@ -113,7 +137,10 @@ function Questionnaire(props) {
         <div className="secondary-button" onClick={() => handleBack()}>
           <p>Back</p>
         </div>
-        <div className="primary-button" onClick={() => handleNext()}>
+        <div
+          className={"primary-button " + (buttonDisabled ? "disabled" : null)}
+          onClick={() => handleNext()}
+        >
           <p>Continue</p>
         </div>
       </div>
@@ -135,6 +162,13 @@ function Questionnaire(props) {
             className="text-input"
             onChange={(e) => handleAnswerInput(key, e.target.value)}
           />
+          { input.options && input.options.map((option) => {
+            return (
+              <div className="secondary-button" onClick={() => handleAnswerInput(key, option)}>
+                <p>{option}</p>
+              </div>
+            )
+          })}
         </div>
       )
     }
